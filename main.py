@@ -1,33 +1,52 @@
 import socket
 from IPy import IP
 
-def check_ip(target):
-    try:
-        return IP(target)
-    except ValueError:
-        return socket.gethostbyname(target)
 
-def scan(target):
-    print(f"\n[...] Scanning target -> {target}")
-    host = check_ip(target)
+class PortScanner():
 
-    for port in range(20, 81):
-        scan_host(host, port)
+    def __init__(self, target, port):
+        self.target = target
+        self.port = port
 
-def scan_host(host, port=80):
-    try:
-        sock = socket.socket()
-        sock.settimeout(0.5)
-        sock.connect((host, port))
-        print(f"[+] Port {port} is open")
-    except:
-        pass
+    def check_ip(self):
+        try:
+            return IP(self.target)
+        except ValueError:
+            try:
+                return socket.gethostbyname(self.target)
+            except Exception as e:
+                print(f"[E] An error occurred : {e}")
+
+    def scan(self):
+        print(f"\n[+] * Scanning target -> {self.target}")
+        host = self.check_ip()
+
+        for port in range(1, int(self.port) + 1):
+            self.scan_host(port)
+
+    def scan_host(self, port=21):
+        try:
+            sock = socket.socket()
+            sock.settimeout(0.5)
+            sock.connect((self.host, port))
+            try:
+                bannner = ": " + sock.recv(1024).decode()
+            except:
+                banner = ""
+
+            print(f"[+] Port {port} is open {banner}")
+        except:
+            print(f"[-] Port {port} is closed")
 
 if __name__ == "__main__":
-    targets = input("Enter the target/s (comma separated) you want to scan: ")
 
-    if "," in targets:
-        for target in targets.strip(" ").split(","):
-            scan(target)
+    target = input("Enter the target/s (comma separated) you want to scan: ")
+    port = input("Enter the ports range (500 -> 500 first ports) : ")
+
+    portscanner = PortScanner(target, port)
+
+    if "," in portscanner.target:
+        for target in portscanner.target.strip(" ").split(","):
+            portscanner.scan()
     else:
-        scan(targets)
+        portscanner.scan()
