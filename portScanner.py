@@ -1,7 +1,6 @@
 import socket
 from IPy import IP
 
-
 class PortScanner():
 
     def __init__(self, target, port):
@@ -16,27 +15,27 @@ class PortScanner():
                 return socket.gethostbyname(self.target)
             except Exception as e:
                 print(f"[E] An error occurred : {e}")
+                exit(0)
 
     def scan(self):
-        print(f"\n[+] * Scanning target -> {self.target}")
+        print(f"\n[*] Scanning target -> {self.target}")
         host = self.check_ip()
 
         for port in range(1, int(self.port) + 1):
             self.scan_host(port)
 
-    def scan_host(self, port=21):
+    def scan_host(self, port=22):
         try:
             sock = socket.socket()
-            sock.settimeout(0.5)
-            sock.connect((self.host, port))
+            sock.settimeout(1)
+            sock.connect((self.target, port))
             try:
                 bannner = ": " + sock.recv(1024).decode()
-            except:
+            except :
                 banner = ""
-
             print(f"[+] Port {port} is open {banner}")
-        except:
-            print(f"[-] Port {port} is closed")
+        except :
+            pass
 
 if __name__ == "__main__":
 
@@ -47,6 +46,7 @@ if __name__ == "__main__":
 
     if "," in portscanner.target:
         for target in portscanner.target.strip(" ").split(","):
+            portscanner.target = target
             portscanner.scan()
     else:
         portscanner.scan()
