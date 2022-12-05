@@ -1,5 +1,7 @@
+# -*- Coding : utf-8 -*-
+
+import socket, time, threading
 import paramiko, termcolor
-import sys, socket, time, threading
 
 password_found = False
 
@@ -21,9 +23,9 @@ def ssh_connect(password):
 
     ssh.close()
 
-
 host = input("[*] Enter the SSH address : ")
 username = input("[*] Enter the SSH username : ")
+
 print(f"\n[*] Starting SSH bruteforce for {username}@{host}")
 
 with open("common.txt", "r") as file:

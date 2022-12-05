@@ -1,3 +1,5 @@
+# -*- Coding : utf-8 -*-
+
 import socket
 from IPy import IP
 
@@ -30,10 +32,10 @@ class PortScanner():
             sock.settimeout(1)
             sock.connect((self.target, port))
             try:
-                bannner = ": " + sock.recv(1024).decode()
+                banner = ": " + sock.recv(1024).decode().strip("\n\r")
             except :
                 banner = ""
-            print(f"[+] Port {port} is open {banner}")
+            print(f"[+] Port {port:_} is open {banner}")
         except :
             pass
 
