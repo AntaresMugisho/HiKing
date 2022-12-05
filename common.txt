@@ -3,6 +3,7 @@ helloword
 test1234
 1234test
 abcd
+0000
 1111
 1234
 1234Test
