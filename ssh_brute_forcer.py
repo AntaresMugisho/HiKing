@@ -23,7 +23,7 @@ def ssh_connect(password):
 
     ssh.close()
 
-host = input("[*] Enter the SSH address : ")
+host = input("[*] Enter the SSH host address : ")
 username = input("[*] Enter the SSH username : ")
 
 print(f"\n[*] Starting SSH bruteforce for {username}@{host}")

