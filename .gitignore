@@ -1,2 +1,7 @@
-.idea/
-.env/
+__pycache__
+.idea
+.env
+processmanager.txt
+processmanager
+test.py
+secret_key
