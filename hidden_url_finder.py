@@ -4,8 +4,8 @@ import requests
 
 def request(url):
     try:
-        return requests.get("http://" + url)
-    except requests.exceptions.ConnectionError:
+        return requests.request.get("http://" + url)
+    except Exception as e:
         pass
 
 
