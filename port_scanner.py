@@ -3,8 +3,8 @@
 import socket
 from IPy import IP
 
-class PortScanner():
 
+class PortScanner():
     def __init__(self, target, port):
         self.target = target
         self.port = port
@@ -38,6 +38,7 @@ class PortScanner():
             print(f"[+] Port {port:_} is open {banner}")
         except :
             pass
+
 
 if __name__ == "__main__":
 
