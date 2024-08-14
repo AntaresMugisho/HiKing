@@ -1,3 +1,5 @@
-IPy==1.1
-scapy==2.4.5
-termcolor==2.1.1
+IPy
+ipaddress
+python-nmap
+termcolor
+pyinstaller

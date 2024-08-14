@@ -72,7 +72,8 @@ def scan_os_and_services(ip):
 
 
 def main():
-    ip_range = "192.168.241.48/24"
+    # ip_range = "192.168.241.48/24"
+    ip_range = input("Enter IP Address in CIDR notation: ")
 
     ip, cidr = ip_range.split("/")
 

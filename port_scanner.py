@@ -26,7 +26,7 @@ class PortScanner():
         for port in range(1, int(self.port) + 1):
             self.scan_host(port)
 
-    def scan_host(self, port=22):
+    def scan_host(self, port=21):
         try:
             sock = socket.socket()
             sock.settimeout(1)
