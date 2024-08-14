@@ -1,7 +1,10 @@
 __pycache__
-.idea
+/.idea
+/venv
 .env
 processmanager.txt
 processmanager
 test.py
 secret_key
+/build
+/dist
