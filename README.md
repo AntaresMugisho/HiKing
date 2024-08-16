@@ -1,5 +1,13 @@
-# HiKing
-Collection of showcase python ethical hacking tools. Built for educational purpose only.
+# WiPister
+This script is meant to perform a deep network scan.
+
+# How it works ?
+1. Download the latest release
+2. Open it in the terminal and run `sudo ./wi_pister`
+3. Enter the your IP address in CIDR (Classless Inter-Domain Routing) notation.
+    eg: 192.168.1.1/24
+4. The scan process will start and display lot of network information including the nework address, the connected hosts as well
+    as open ports on each connected mask.
 
 # Attention
 This repository contains actual malware, do not execute any of these 
